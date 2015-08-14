@@ -54,6 +54,8 @@ Router::scope('/', function ($routes) {
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
+
+
     /**
      * Connect catchall routes for all controllers.
      *
@@ -70,7 +72,19 @@ Router::scope('/', function ($routes) {
      * You can remove these routes once you've connected the
      * routes you want in your application.
      */
+
+    // New route we're adding for our tagged action.
+// The trailing `*` tells CakePHP that this action has
+// passed parameters.
+    Router::scope(
+        '/bookmarks',
+        ['controller' => 'Bookmarks'],
+        function ($routes) {
+            $routes->connect('/tagged/*', ['action' => 'tags']);
+        }
+        );
     $routes->fallbacks('InflectedRoute');
+
 });
 
 /**

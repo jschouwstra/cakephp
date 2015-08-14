@@ -11,6 +11,7 @@ use App\Controller\AppController;
 class BookmarksController extends AppController
 {
 
+
     /**
      * Index method
      *
@@ -19,7 +20,7 @@ class BookmarksController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users']
+        'contain' => ['Users']
         ];
         $this->set('bookmarks', $this->paginate($this->Bookmarks));
         $this->set('_serialize', ['bookmarks']);
@@ -36,7 +37,7 @@ class BookmarksController extends AppController
     {
         $bookmark = $this->Bookmarks->get($id, [
             'contain' => ['Users', 'Tags']
-        ]);
+            ]);
         $this->set('bookmark', $bookmark);
         $this->set('_serialize', ['bookmark']);
     }
@@ -75,7 +76,7 @@ class BookmarksController extends AppController
     {
         $bookmark = $this->Bookmarks->get($id, [
             'contain' => ['Tags']
-        ]);
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $bookmark = $this->Bookmarks->patchEntity($bookmark, $this->request->data);
             if ($this->Bookmarks->save($bookmark)) {
@@ -109,4 +110,25 @@ class BookmarksController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+
+
+public function tags()
+{
+    // The 'pass' key is provided by CakePHP and contains all
+    // the passed URL path segments in the request.
+    $tags = $this->request->params['pass'];
+
+    // Use the BookmarksTable to find tagged bookmarks.
+    $bookmarks = $this->Bookmarks->find('tagged', [
+        'tags' => $tags
+    ]);
+
+    // Pass variables into the view template context.
+    $this->set([
+        'bookmarks' => $bookmarks,
+        'tags' => $tags
+    ]);
 }
+}
+
